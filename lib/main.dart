@@ -14,8 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        backgroundColor: Colors.white,
-      ),
+          backgroundColor: Colors.white, focusColor: Colors.blueAccent),
       home: const Login(),
     );
   }
