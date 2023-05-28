@@ -1,60 +1,67 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_auth/src/components/gredient_button.dart';
-import 'package:flutter_firebase_auth/src/ui/resister.dart';
-import 'package:rive/rive.dart';
 
+import '../components/gredient_button.dart';
 import '../components/input_field.dart';
+import '../root.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class Resister extends StatefulWidget {
+  const Resister({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Resister> createState() => _ResisterState();
 }
 
-class _LoginState extends State<Login> {
+class _ResisterState extends State<Resister> {
   final email = TextEditingController();
   final password = TextEditingController();
-  late var isLoading = false;
+  var isLoading = false;
 
-  void validate() {
-    if (email.value.text.trim() == '' || password.value.text.trim() == '') {
-      return;
-    }
-
+  void signUp() {
     setState(() {
       isLoading = true;
     });
-
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      setState(() {
-        isLoading = false;
-        signIn();
-      });
-    });
-  }
-
-  void signIn() {
     try {
-      showCheck();
-
       FirebaseAuth.instance
-          .signInWithEmailAndPassword(
+          .createUserWithEmailAndPassword(
               email: email.value.text.trim(),
               password: password.value.text.trim())
-          .then((value) => Navigator.of(context).pop());
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        showResisterDialog();
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
     } catch (e) {
       debugPrint('에러');
     }
   }
 
-  void showCheck() {
+  void showResisterDialog() {
     showDialog(
         context: context,
-        barrierColor: Colors.black26,
-        builder: (context) => Center(
-              child: _accept(),
+        builder: (context) => AlertDialog(
+              title: const Text('환영합니다 !'),
+              content: const Text('회원가입을 완료했습니다 ! 확인 버튼을 클릭하면 로그인 화면으로 이동합니다.'),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (_) => const Root(),
+                        ),
+                        (route) => false,
+                      );
+                    },
+                    child: const Text('확인'))
+              ],
             ));
   }
 
@@ -74,7 +81,7 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_title(), _input(), _button(), _signUp()],
+            children: [_title(), _input(), _button()],
           ),
         ),
       ),
@@ -86,7 +93,7 @@ class _LoginState extends State<Login> {
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
       child: Align(
           alignment: Alignment.bottomLeft,
-          child: Text('Sign In',
+          child: Text('Sign Up',
               style: TextStyle(
                   fontFamily: 'Ubuntu',
                   fontSize: 40,
@@ -123,21 +130,17 @@ class _LoginState extends State<Login> {
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: GradientButton(
-          onPressed: validate,
+          onPressed: signUp,
           width: double.infinity,
           height: 20,
-          child: (isLoading) ? _loading() : _loginText()),
+          child: (isLoading) ? _loading() : _resisterText()),
     );
   }
 
-  Widget _signUp() {
-    return TextButton(
-      onPressed: () => Navigator.of(context)
-          .push(MaterialPageRoute(builder: (_) => const Resister())),
-      child: const Text(
-        'Sign Up',
-        style: TextStyle(fontSize: 15),
-      ),
+  Widget _resisterText() {
+    return const Text(
+      'Resister',
+      style: TextStyle(fontFamily: 'Ubuntu', fontSize: 24, color: Colors.white),
     );
   }
 
@@ -146,20 +149,6 @@ class _LoginState extends State<Login> {
       width: 30,
       height: 30,
       child: CircularProgressIndicator(color: Colors.white),
-    );
-  }
-
-  Widget _accept() {
-    return const SizedBox(
-        width: 100,
-        height: 100,
-        child: RiveAnimation.asset('asset/riveasset/check_icon.riv'));
-  }
-
-  Widget _loginText() {
-    return const Text(
-      'Login',
-      style: TextStyle(fontFamily: 'Ubuntu', fontSize: 24, color: Colors.white),
     );
   }
 }

@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/firebase_options.dart';
+import 'package:flutter_firebase_auth/src/root.dart';
 
-import 'src/ui/login.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           backgroundColor: Colors.white, focusColor: Colors.blueAccent),
-      home: const Login(),
+      home: const Root(),
     );
   }
 }
