@@ -7,18 +7,7 @@ Flutter 프로젝트에서 Firebase Auth를 사용하는 예제 로그인 앱입
 
 ## 프로젝트 구조
 
-lib
- ┣ src
- ┃ ┣ components
- ┃ ┃ ┣ gredient_button.dart
- ┃ ┃ ┗ input_field.dart
- ┃ ┣ ui
- ┃ ┃ ┣ home.dart
- ┃ ┃ ┣ login.dart
- ┃ ┃ ┗ resister.dart
- ┃ ┗ root.dart
- ┣ firebase_options.dart
- ┗ main.dart
+
  
 -----------
 
