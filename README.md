@@ -5,7 +5,7 @@ Flutter 프로젝트에서 Firebase Auth를 사용하는 예제 로그인 앱입
 -----------
 
 
-## 프로젝트 구조 소개
+## 프로젝트 구조
 
 lib
  ┣ src
@@ -37,15 +37,15 @@ Firebase Auth를 이용해서 회원가입, 로그인, 로그아웃 기능을 �
 
 ### 로그인 화면
 
-![Simulator Screen Shot - MyIphone 13 Pro - 2023-05-28 at 15 27 19](https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/7db5ee00-051e-4bb1-a6f4-4a5a2e7a7709)
+<img src=https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/7db5ee00-051e-4bb1-a6f4-4a5a2e7a7709 width=250px>
 
 ### 회원가입 화면
 
-![Simulator Screen Shot - MyIphone 13 Pro - 2023-05-28 at 15 27 24](https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/f14371c1-ff4e-40ef-8f41-53825a8d60cc)
+<img src=https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/f14371c1-ff4e-40ef-8f41-53825a8d60cc width=250px>
 
 ### 홈 화면
 
-![Simulator Screen Shot - MyIphone 13 Pro - 2023-05-28 at 15 27 42](https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/9daccdb0-2ac0-4f30-a16f-07301205389a)
+<img src=https://github.com/SangWook16074/flutter_firebase_auth/assets/108314973/9daccdb0-2ac0-4f30-a16f-07301205389a width=250px>
 
 ### 프로젝트 기능
 
@@ -56,6 +56,12 @@ Firebase Auth를 이용해서 간단한 회원가입, 로그인, 로그아웃에
 ## 함수 소개
 * 회원가입 관련 함수
 - signUp()
+    텍스트 입력값을 이용해서 새로운 계정을 생성합니다. 비밀번호가 너무 간단하거나, 이미 존재하는 이메일이라면 계정이 생성되지 않습니다.
 
 * 로그인 관련 함수
+- signIn()
+    텍스트 입력값을 이용해서 로그인하는 함수입니다. 로그인에 성공하면, StreamBuilder를 통해서 페이지가 이동합니다.
+
 * 로그아웃 함수
+- signOut()
+    현재 로그인되어있는 상태를 로그아웃합니다.
