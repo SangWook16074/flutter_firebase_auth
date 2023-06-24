@@ -1,76 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_firebase_auth/src/controller/register_controller.dart';
+import 'package:get/get.dart';
 import '../components/gredient_button.dart';
 import '../components/input_field.dart';
-import '../root.dart';
 
-class Resister extends StatefulWidget {
+class Resister extends GetView<RegisterController> {
   const Resister({super.key});
-
-  @override
-  State<Resister> createState() => _ResisterState();
-}
-
-class _ResisterState extends State<Resister> {
-  final email = TextEditingController();
-  final password = TextEditingController();
-  var isLoading = false;
-
-  void signUp() {
-    setState(() {
-      isLoading = true;
-    });
-    try {
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: email.value.text.trim(),
-              password: password.value.text.trim())
-          .then((value) {
-        setState(() {
-          isLoading = false;
-        });
-        showResisterDialog();
-      });
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      debugPrint('에러');
-    }
-  }
-
-  void showResisterDialog() {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('환영합니다 !'),
-              content: const Text('회원가입을 완료했습니다 ! 확인 버튼을 클릭하면 로그인 화면으로 이동합니다.'),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (_) => const Root(),
-                        ),
-                        (route) => false,
-                      );
-                    },
-                    child: const Text('확인'))
-              ],
-            ));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    email.dispose();
-    password.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +43,7 @@ class _ResisterState extends State<Resister> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
             child: InputField(
-                controller: email,
+                controller: controller.email,
                 hintText: 'E-mail',
                 prefixIcon: const Icon(Icons.email),
                 obscure: false)),
@@ -116,7 +51,7 @@ class _ResisterState extends State<Resister> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
             child: InputField(
-              controller: password,
+              controller: controller.password,
               hintText: 'password',
               prefixIcon: const Icon(Icons.lock),
               obscure: true,
@@ -129,11 +64,13 @@ class _ResisterState extends State<Resister> {
   Widget _button() {
     return Padding(
       padding: const EdgeInsets.all(24.0),
-      child: GradientButton(
-          onPressed: signUp,
-          width: double.infinity,
-          height: 20,
-          child: (isLoading) ? _loading() : _resisterText()),
+      child: Obx(
+        () => GradientButton(
+            onPressed: controller.register,
+            width: double.infinity,
+            height: 20,
+            child: (controller.isLoading) ? _loading() : _resisterText()),
+      ),
     );
   }
 

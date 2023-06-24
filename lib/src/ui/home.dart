@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth/src/controller/app_controller.dart';
+import 'package:get/get.dart';
 
-class Home extends StatelessWidget {
+class Home extends GetView<AppController> {
   const Home({super.key});
-
-  void signOut() {
-    FirebaseAuth.instance.signOut();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,8 @@ class Home extends StatelessWidget {
                   fontSize: 40,
                   fontWeight: FontWeight.bold),
             ),
-            ElevatedButton(onPressed: signOut, child: const Text('Sign Out'))
+            ElevatedButton(
+                onPressed: controller.signOut, child: const Text('Sign Out'))
           ],
         ),
       ),
